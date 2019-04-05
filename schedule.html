@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Departures</title>
+  <link rel="stylesheet" type="text/css" href="schedule.css"/>
+</head>
+
+<body onLoad = "getNext();">
+     <h3><span id="timeUntil"></span> <span id="timeUntilNext"></span></h3>
+     <h1 id="busOne"></h1>
+     <h1 id="busTwo"></h1>
+     <h1 id="busThree"></h1>
+     <a href="departures.html"><h2>New Destination</h2></a>
+     
+     <script>
+
+    //take location variable from URL, either amherst or noho
+    function processUser(b)
+    {
+        var parameters = location.search.substring(1).split("&");
+
+        var temp = parameters[0].split("=");
+        d = unescape(temp[1]);
+        return d;
+    }
+
+     function timeUntil(h, m, nextHour, nextMin)
+     {
+        if(h == nextHour){
+            return nextMin - m;
+        }
+        if(h < nextHour){
+            var diff = nextHour - h;
+            var save = 60*diff - m + nextMin;
+            if(save > 200){
+                return -1;
+            }
+            else{
+            return save;
+            }
+        }
+        else {
+            return -1;
+        }
+     }
+
+     function compare(h, m, departureHour, departureMin)
+     {
+        if(h < departureHour){
+            return 1;
+        }
+        if(h == departureHour && m <= departureMin){
+            return 1;
+        }
+        if(h == departureHour && m > departureMin){
+            return;
+        }
+        else return;
+    }    
+
+    function getNext()
+    {   
+        var busStop;
+        var destination = processUser();
+        if(destination == "'noho'"){
+            busStop = "Haigis Mall";
+        }
+        if(destination == "'amherst'"){
+            busStop = "Smith College";
+        }
+        var d = new Date();
+        var hour = d.getHours();
+        var min = d.getMinutes();
+
+
+        if(busStop == "Smith College"){
+        //weekday schedule, excluding thursday and friday
+        if(d.getDay() > 0 && d.getDay() < 4){ 
+        var departures = [[6,0], [7,0], [7,20], [7,40], [8,0], [8,20], [8,40], [9,0], [9,20], [9,40], [10,0], [10,20], [10,40], [11,0], [11,20], [11,40], [12,0],
+        [12,20], [12,40], [13,0], [13,20], [13,40], [14,0], [14,20], [14,40], [15,0], [15,20], [15,40], [16,0],
+        [16,20], [16,40], [17,0], [17,30], [18,0], [18,30], [19,0], [19,30], [20,30], [21,15], [22,0], [22,45]];
+        }
+        //thursday
+        if(d.getDay() == 4){
+        var departures = [[6, 0], [7,0], [7,20], [7,40], [8,0], [8,20], [8,40], [9,0], [9,20], [9,40], [10,0], [10,20], [10,40], [11,0], [11,20], [11,40], [12,0],
+        [12,20], [12,40], [13,0], [13,20], [13,40], [14,0], [14,20], [14,40], [15,0], [15,20], [15,40], [16,0],
+        [16,20], [16,40], [17,0], [17,30], [18,0], [18,30], [19,0], [19,30], [20,30], [21,15], [22,0], [22,45], [23,30], [24,15]];
+        }
+        //friday
+        if(d.getDay() == 5){
+        var departures = [[6, 0], [7,0], [7,20], [7,40], [8,0], [8,20], [8,40], [9,0], [9,20], [9,40], [10,0], [10,20], [10,40], [11,0], [11,20], [11,40], [12,0],
+        [12,20], [12,40], [13,0], [13,20], [13,40], [14,0], [14,20], [14,40], [15,0], [15,20], [15,40], [16,0],
+        [16,20], [16,40], [17,0], [17,30], [18,0], [18,30], [19,0], [19,30], [20,30], [21,15], [22,0], [22,45], [23,30], [24,15], [25,0], [25,45]];
+        }
+        //saturday
+        if(d.getDay() == 6){
+        var departures = [[6, 0], [7,0], [8,0], [9,0], [9,30], [10,0], [10,30], [11,0], [11,30], [12,0],
+        [12,30], [13,0], [13,30], [14,0], [14,30], [15,0], [15,30], [16,0],
+        [16,30], [17,0], [17,30], [18,0], [19,0], [20,0], [20,45], [21,30], [22,30], [23,0], [24,0], [24,30], [25,30], [25,45]];
+        }
+        //sunday
+        if(d.getDay() == 0){
+        var departures = [[8,0], [9,0], [10,0], [11,0], [12,0], [13,0], [14,0], [15,0], [16,0], [17,0], [18,0], [19,0], [20,0], [21,0], [21,30]];}
+        }
+
+        if(busStop == "Haigis Mall"){
+        //weekday schedule, excluding thursday and friday
+        if(d.getDay() > 0 && d.getDay() < 4){ 
+        var departures = [[6,45], [7,45], [8,10], [8,30], [9,0], [9,20], [9,40], [10,0], [10,20], [10,40], [11,0], [11,20], [11,40], [12,0],
+        [12,20], [12,40], [13,0], [13,20], [13,40], [14,5], [14,25], [14,45], [15,5], [15,25], [15,45], [16,5],
+        [16,20], [16,40], [17,0], [17,20], [17,40], [18,0], [18,30], [19,0], [19,30], [20,0], [20,30], [21,30], [22,15], [23,00], [23,45]];
+        }
+        //thursday
+        if(d.getDay() == 4){
+        var departures = [[6,45], [7,45], [8,10], [8,30], [9,0], [9,20], [9,40], [10,0], [10,20], [10,40], [11,0], [11,20], [11,40], [12,0],
+        [12,20], [12,40], [13,0], [13,20], [13,40], [14,5], [14,25], [14,45], [15,5], [15,25], [15,45], [16,5],
+        [16,20], [16,40], [17,0], [17,20], [17,40], [18,0], [18,30], [19,0], [19,30], [20,0], [20,30], [21,30], [22,15], [23,00], [23,45], [24,25], [25,10]];
+        }
+        //friday
+        if(d.getDay() == 5){
+        var departures = [[6,45], [7,45], [8,10], [8,30], [9,0], [9,20], [9,40], [10,0], [10,20], [10,40], [11,0], [11,20], [11,40], [12,0],
+        [12,20], [12,40], [13,0], [13,20], [13,40], [14,5], [14,25], [14,45], [15,5], [15,25], [15,45], [16,5],
+        [16,20], [16,40], [17,0], [17,20], [17,40], [18,0], [18,30], [19,0], [19,30], [20,0], [20,30], [21,30], [22,15], [23,00], [23,45], [24,25], [25,10], [25,45], [26,30]];
+        }
+        //saturday
+        if(d.getDay() == 6){
+        var departures = [[6,35], [7,35], [8,55], [9,50], [10,20], [10,50], [11,20], [11,40], [12,5], [12,35], [13,5], [13,35], [14,5], [14,35], [15,5], [15,35], [16,5],
+        [16,35], [17,5], [17,35], [18,5], [18,35], [19,5], [20,5], [20,50], [21,50], [22,20], [23,20], [23,50], [24,50], [25,15], [26,15], [26,30]];
+        }
+        //sunday
+        if(d.getDay() == 0){
+        var departures = [[9,0], [10,0], [11,0], [12,0], [13,0], [14,0], [15,0], [16,0], [17,0], [18,0], [19,0], [20,0], [20,50], [21,50], [22,15]];}
+        }
+
+        var threeDepartures = [[]];
+        var t;
+        for(var j = 0; j < departures.length; j++){ 
+            t = compare(hour, min, departures[j][0], departures[j][1]);
+            if(threeDepartures.length == 4){
+                break;}
+            if(t==1){
+                threeDepartures.push(departures[j]);
+            }
+         }
+         if(threeDepartures.length == 1){
+            threeDepartures.push(departures[0]);
+            threeDepartures.push(departures[1]);
+            threeDepartures.push(departures[2]);
+        }
+        if(threeDepartures.length == 2){
+            threeDepartures.push(departures[0]);
+            threeDepartures.push(departures[1]);
+        }
+        if(threeDepartures.length == 3){
+            threeDepartures.push(departures[0]);
+        }
+        var nextDepartureHour = threeDepartures[1][0];
+        var nextDepartureMin = threeDepartures[1][1];
+        var nextNextDepartureHour = threeDepartures[2][0];
+        var nextNextDepartureMin = threeDepartures[2][1];
+        
+        for(var j = 0; j < threeDepartures.length; j++) {
+            if(threeDepartures[j][0] < 12){
+            threeDepartures[j] = threeDepartures[j] + "AM";
+            threeDepartures[j] = threeDepartures[j].replace(/,/g, ':');
+            if(threeDepartures[j].length == 5){
+                threeDepartures[j] = threeDepartures[j].replace(/0/g, '00');
+            }
+            //fixes error where only two zeros are diplayed if hour is 10:00AM or 10:00PM
+            if(threeDepartures[j] == "10:0AM"){
+                threeDepartures[j] = threeDepartures[j].replace(/10:0AM/g, '10:00AM');
+            }
+            if(threeDepartures[j] == "10:0PM"){
+                threeDepartures[j] = threeDepartures[j].replace(/10:0AP/g, '10:00PM');
+            }
+            }
+            if(threeDepartures[j][0] == 12){
+                threeDepartures[j] = threeDepartures[j] + "PM";
+                threeDepartures[j] = threeDepartures[j].replace(/,/g, ':');
+                if(threeDepartures[j].length == 5){
+                threeDepartures[j] = threeDepartures[j].replace(/0/g, '00');
+            }
+            }
+            if(threeDepartures[j][0] > 12 && threeDepartures[j][0] <= 24){
+                threeDepartures[j][0] = threeDepartures[j][0] - 12;
+                threeDepartures[j] = threeDepartures[j] + "PM";
+                threeDepartures[j] = threeDepartures[j].replace(/,/g, ':');
+                if(threeDepartures[j].length == 5){
+                threeDepartures[j] = threeDepartures[j].replace(/0/g, '00');
+            }
+            }
+            if(threeDepartures[j][0] > 24){
+                threeDepartures[j][0] = threeDepartures[j][0] - 24;
+                threeDepartures[j] = threeDepartures[j] + "AM";
+                threeDepartures[j] = threeDepartures[j].replace(/,/g, ':');
+                if(threeDepartures[j].length == 5){
+                threeDepartures[j] = threeDepartures[j].replace(/0/g, '00');
+            }
+            }
+    }
+        document.getElementById("busOne").innerHTML = threeDepartures[1];
+        document.getElementById("busTwo").innerHTML = threeDepartures[2];
+        document.getElementById("busThree").innerHTML = threeDepartures[3];
+
+        if(timeUntil(hour, min, nextDepartureHour, nextDepartureMin) == -1)
+        {
+            document.getElementById("timeUntil").innerHTML = "Good night! There is a bus departing from " + busStop + " in the morning.";
+        }
+        if(timeUntil(hour, min, nextDepartureHour, nextDepartureMin) != -1 && timeUntil(hour, min, nextNextDepartureHour, nextNextDepartureMin) == -1)
+        {
+            document.getElementById("timeUntil").innerHTML = "There is a bus departing from " + busStop + " in " +
+            timeUntil(hour, min, nextDepartureHour, nextDepartureMin) + " minutes."
+            document.getElementById("timeUntilNext").innerHTML = "The next bus after that departs tomorrow morning.";
+        }
+        if(timeUntil(hour, min, nextDepartureHour, nextDepartureMin) != -1)
+        {
+
+            document.getElementById("timeUntil").innerHTML = "There is a bus departing from " + busStop + " in " +
+            timeUntil(hour, min, nextDepartureHour, nextDepartureMin) + " minutes."
+            document.getElementById("timeUntilNext").innerHTML = "The next bus after that departs in " + timeUntil(hour, min, nextNextDepartureHour, nextNextDepartureMin)
+            + " minutes.";
+        }
+    }
+
+     </script>
+</body>
+</html>
