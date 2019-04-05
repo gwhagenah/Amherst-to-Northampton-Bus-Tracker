@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Where are you going?</title>
+  <link rel="stylesheet" type="text/css" href="schedule.css"/>
+</head>
+<body>
+    <!-- <nav class>
+        <h1 class="alignleft">PVTA Helper</h1>
+    </nav> -->
+     <h3>It is <span id="day"></span><span id="phase"></span></h3><br>
+     <h1 id="home">Where are you going?</h1>
+     <a href="schedule.html?destination='amherst'"><h2>Amherst</h2></a>
+     <a href="schedule.html?destination='noho'"><h2>Northampton</h2></a>
+</body>
+<script>
+    var d = new Date();
+    var c = d.getHours();
+    var day = d.getDay();
+    if(day == 0)
+    day = "Sunday ";
+    if(day == 1)
+    day = "Monday ";
+    if(day == 2)
+    day = "Tuesday ";
+    if(day == 3)
+    day = "Wednesday ";
+    if(day == 4)
+    day = "Thursday ";
+    if(day == 5)
+    day = "Friday ";
+    if(day == 6)
+    day = "Saturday ";
+
+    if(c == 24 || c >= 0 && c < 12)
+    var phase = " morning. ";
+    if(c >= 12 && c < 17)
+    var phase = " afternoon. ";
+    if(c >= 17 && c < 20)
+    var phase = " evening. ";
+    if(c >= 20 && c < 24)
+    var phase = " night. ";
+document.getElementById("day").innerHTML = day;
+document.getElementById("phase").innerHTML = phase;
+
+</script>
+</html>
